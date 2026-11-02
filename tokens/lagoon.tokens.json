@@ -1,0 +1,82 @@
+{
+  "$description": "Lagoon design tokens, the single source of truth for the Compose theme (lagoon-compose) and the modern FlatLaf theme. Colours are #RRGGBB, or #AARRGGBB with alpha. Sizes carry their unit: dp for lengths, sp for text.",
+  "identity": {
+    "color": {
+      "ground": "#F4F7FA",
+      "surface": "#FFFFFF",
+      "surfaceMuted": "#F0F4F8",
+      "track": "#E8EDF2",
+      "ink": "#0F1B2A",
+      "inkMuted": "#4A5868",
+      "inkFaint": "#A9B5C1",
+      "line": "#DCE3EA",
+      "lineSoft": "#E3E9EF",
+      "divider": "#EDF1F5",
+      "primary": "#1868C7",
+      "onPrimary": "#FFFFFF",
+      "primaryStrong": "#0F55A8",
+      "primaryTint": "#E7F1FC",
+      "selection": "#EEF5FD",
+      "success": "#0B6B66",
+      "successTint": "#E0F4F2",
+      "attention": "#8A5300",
+      "attentionTint": "#FFF1DB",
+      "danger": "#B42318",
+      "dangerTint": "#FDECEA",
+      "dangerLine": "#F2C9C4",
+      "neutral": "#4A5868",
+      "neutralTint": "#EDF0F3",
+      "night": "#0F1B2A",
+      "onNight": "#FFFFFF",
+      "onNightMuted": "#B8C4D0",
+      "nightAccent": "#3DA9FC",
+      "scrim": "#6B0F1B2A",
+      "shadow": "#0F1B2A"
+    },
+    "tiles": [
+      ["#E7F1FC", "#0F55A8"],
+      ["#E0F4F2", "#0B6B66"],
+      ["#FFF1DB", "#8A5300"],
+      ["#ECEBFD", "#4B3FB0"],
+      ["#FDE9EC", "#A1283A"],
+      ["#EAF5E3", "#3D6B1F"]
+    ],
+    "radius": {
+      "small": "8dp",
+      "control": "12dp",
+      "card": "16dp",
+      "dialog": "18dp"
+    },
+    "font": {
+      "family": "Inter"
+    }
+  },
+  "metrics": {
+    "mobile": {
+      "controlHeight": "44dp",
+      "buttonHeight": "52dp",
+      "rowHeight": "60dp",
+      "touchTarget": "44dp",
+      "gutter": "16dp",
+      "gap": "12dp",
+      "titleSize": "30sp",
+      "headlineSize": "26sp",
+      "bodySize": "15sp",
+      "smallSize": "13sp",
+      "labelSize": "12sp"
+    },
+    "desktop": {
+      "controlHeight": "36dp",
+      "buttonHeight": "38dp",
+      "rowHeight": "46dp",
+      "touchTarget": "30dp",
+      "gutter": "24dp",
+      "gap": "16dp",
+      "titleSize": "26sp",
+      "headlineSize": "20sp",
+      "bodySize": "14sp",
+      "smallSize": "13sp",
+      "labelSize": "12sp"
+    }
+  }
+}

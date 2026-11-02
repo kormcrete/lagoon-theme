@@ -21,3 +21,9 @@ GEMINI.md
 .aider*
 .agent/
 .mcp.json
+
+# Compose (Gradle) build
+compose/.gradle/
+compose/**/build/
+compose/.kotlin/
+compose/local.properties
