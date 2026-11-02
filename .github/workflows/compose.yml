@@ -8,6 +8,11 @@ on:
     paths: ['compose/**', 'tokens/**', '.github/workflows/compose.yml']
   workflow_dispatch:
 
+# A newer push to the same branch cancels this branch's older runs.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
