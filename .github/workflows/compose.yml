@@ -36,7 +36,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
       - name: Build
         run: |
           set -o pipefail
@@ -45,6 +45,6 @@ jobs:
         if: failure()
         run: |
           # Compiler and Gradle errors as one annotation, readable without downloading the log.
-          errors=$(grep -E '^e: |^\* What went wrong|^> |error:|Could not|Unresolved' build.log | grep -v '^> Task' | head -80 \
-            | sed -e 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+          errors=$( { grep -E '^e: |error:|Could not|Unresolved' build.log | grep -v '^> Task' | head -60; echo '--- log tail ---'; grep -v '^> Task\|^\s*at ' build.log | tail -40; } \
+            | sed -e 's/%/%25/g' | awk '{ printf "%s%%0A", $0 }')
           echo "::error title=Build errors::${errors:-no error lines found}"

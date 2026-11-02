@@ -1,5 +1,6 @@
 package io.github.kormcrete.lagoon.compose
 
+import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -11,7 +12,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -106,11 +106,11 @@ data class LagoonMetrics(
 
 @Immutable
 data class LagoonShapes(
-    val small: Shape,
-    val control: Shape,
-    val card: Shape,
-    val dialog: Shape,
-    val pill: Shape,
+    val small: CornerBasedShape,
+    val control: CornerBasedShape,
+    val card: CornerBasedShape,
+    val dialog: CornerBasedShape,
+    val pill: CornerBasedShape,
 ) {
     companion object {
         val Default = LagoonShapes(
