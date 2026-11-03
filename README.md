@@ -33,7 +33,7 @@ Not on Maven Central yet: build it with `mvn install`, then depend on the snapsh
 ```xml
 <dependency>
     <groupId>io.github.kormcrete</groupId>
-    <artifactId>swing-flatlaf-lagoon-theme</artifactId>
+    <artifactId>lagoon-flatlaf</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
