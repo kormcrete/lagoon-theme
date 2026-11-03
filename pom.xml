@@ -10,7 +10,7 @@
 
     <name>swing-flatlaf-lagoon-theme</name>
     <description>A classic light FlatLaf theme: neutral grey, square corners, crisp frames, framed tabs and tables.</description>
-    <url>https://github.com/kormcrete/swing-flatlaf-lagoon-theme</url>
+    <url>https://github.com/kormcrete/lagoon-theme</url>
     <inceptionYear>2026</inceptionYear>
 
     <licenses>
@@ -29,9 +29,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/kormcrete/swing-flatlaf-lagoon-theme.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/kormcrete/swing-flatlaf-lagoon-theme.git</developerConnection>
-        <url>https://github.com/kormcrete/swing-flatlaf-lagoon-theme</url>
+        <connection>scm:git:https://github.com/kormcrete/lagoon-theme.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/kormcrete/lagoon-theme.git</developerConnection>
+        <url>https://github.com/kormcrete/lagoon-theme</url>
     </scm>
 
     <properties>

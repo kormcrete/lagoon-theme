@@ -1,6 +1,6 @@
-# swing-flatlaf-lagoon-theme
+# lagoon-theme
 
-[![build](https://github.com/kormcrete/swing-flatlaf-lagoon-theme/actions/workflows/build.yml/badge.svg)](https://github.com/kormcrete/swing-flatlaf-lagoon-theme/actions/workflows/build.yml)
+[![build](https://github.com/kormcrete/lagoon-theme/actions/workflows/build.yml/badge.svg)](https://github.com/kormcrete/lagoon-theme/actions/workflows/build.yml)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
 A classic light theme for [FlatLaf](https://www.formdev.com/flatlaf/).
