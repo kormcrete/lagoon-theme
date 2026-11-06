@@ -83,6 +83,16 @@ class FlatLagoonLafTest {
         assertEquals(new Color(0xBCBDBE), UIManager.getColor("Table.gridColor"));
     }
 
+    /**
+     * On macOS FlatLaf puts every popup with a drop shadow into its own window, which macOS animates as it opens and
+     * rims with its shadow next to the theme's frame. Without the shadow a menu inside the window is painted in it.
+     */
+    @Test
+    void onMacOSPopupsHaveNoDropShadowSoMenusStayInTheWindow() {
+        FlatLagoonLaf.setup();
+        assertEquals(!SystemInfo.isMacOS, UIManager.getBoolean("Popup.dropShadowPainted"));
+    }
+
     @Test
     void registersItsOwnDelegatesAndBorders() {
         FlatLagoonLaf.setup();
