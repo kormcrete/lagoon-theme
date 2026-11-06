@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The Lagoon design tokens: {@code tokens/lagoon.tokens.json} of this project, the file the Compose theme is
+ * The Lagoon design tokens: {@code tokens/lagoon.tokens.json} of this repository, the file the Compose theme is
  * generated from too, carried in the jar next to this class. {@link FlatLagoonModernLaf} takes its colours,
  * corner radii, sizes and font family from here.
  *

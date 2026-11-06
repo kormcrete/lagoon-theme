@@ -97,12 +97,15 @@ class FlatLagoonModernLafTest {
         FlatLaf.setPreferredSemiboldFontFamily(null);
     }
 
-    /** The project's tokens file, which the Compose theme is generated from (tests run in the project folder). */
+    /**
+     * The repository's shared tokens file, which the Compose theme is generated from (tests run in {@code swing/}, the
+     * tokens are beside it).
+     */
     private static String tokensFile() {
         try {
-            return new String(Files.readAllBytes(Paths.get("tokens", "lagoon.tokens.json")), StandardCharsets.UTF_8);
+            return new String(Files.readAllBytes(Paths.get("..", "tokens", "lagoon.tokens.json")), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new IllegalStateException("run the tests in the project folder", e);
+            throw new IllegalStateException("run the tests in the swing folder", e);
         }
     }
 

@@ -70,15 +70,15 @@
             </resource>
             <!-- the design tokens, read by FlatLagoonModernLaf: the same file the Compose theme is generated from -->
             <resource>
-                <directory>${project.basedir}/tokens</directory>
+                <directory>${project.basedir}/../tokens</directory>
                 <targetPath>io/github/kormcrete/flatlaf/lagoon</targetPath>
                 <includes>
                     <include>lagoon.tokens.json</include>
                 </includes>
             </resource>
-            <!-- the jar carries the project's LICENSE and NOTICE -->
+            <!-- the jar carries the repository's LICENSE and NOTICE -->
             <resource>
-                <directory>${project.basedir}</directory>
+                <directory>${project.basedir}/..</directory>
                 <targetPath>META-INF</targetPath>
                 <includes>
                     <include>LICENSE</include>
