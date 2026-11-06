@@ -1,5 +1,6 @@
 package io.github.kormcrete.flatlaf.lagoon;
 
+import com.formdev.flatlaf.ui.FlatArrowButton;
 import com.formdev.flatlaf.ui.FlatButtonUI;
 import com.formdev.flatlaf.ui.FlatToggleButtonUI;
 import com.formdev.flatlaf.ui.FlatUIUtils;
@@ -35,8 +36,26 @@ public class LagoonButtonUI extends FlatButtonUI {
     }
 
     @Override
+    protected void installDefaults(AbstractButton b) {
+        super.installDefaults(b);
+        keepArrowButtonBorderless(b);
+    }
+
+    @Override
     public Dimension getPreferredSize(JComponent c) {
         return adjust(c, super.getPreferredSize(c));
+    }
+
+    /**
+     * The arrow buttons of combo boxes, spinners, scroll bars and tab areas ({@link FlatArrowButton}) have no
+     * border: their constructor clears it. A later {@code updateUI()}, from any look-and-feel switch through
+     * {@code SwingUtilities.updateComponentTreeUI}, would install {@code Button.border} on them, a framed border
+     * with insets that change the button's size. A border the application set (not a UIResource) stays.
+     */
+    static void keepArrowButtonBorderless(AbstractButton b) {
+        if (b instanceof FlatArrowButton && b.getBorder() instanceof UIResource) {
+            b.setBorder(null);
+        }
     }
 
     @Override

@@ -83,6 +83,7 @@ public final class ModernControlUI {
         protected void installDefaults(AbstractButton b) {
             super.installDefaults(b);
             minimumHeight = UIManager.getInt(getPropertyPrefix() + "minimumHeight");
+            LagoonButtonUI.keepArrowButtonBorderless(b);
         }
     }
 
