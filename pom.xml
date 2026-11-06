@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>lagoon-flatlaf</name>
-    <description>A classic light FlatLaf theme: neutral grey, square corners, crisp frames, framed tabs and tables.</description>
+    <description>Light FlatLaf themes: the classic Lagoon (neutral grey, square corners, crisp frames, framed tabs and tables) and the modern Lagoon (white cards, soft corners, design tokens shared with the Compose theme).</description>
     <url>https://github.com/kormcrete/lagoon-theme</url>
     <inceptionYear>2026</inceptionYear>
 
@@ -48,6 +48,13 @@
             <artifactId>flatlaf</artifactId>
             <version>${flatlaf.version}</version>
         </dependency>
+        <!-- Inter for FlatLagoonModernLaf, when the application adds it; the platform font otherwise -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-fonts-inter</artifactId>
+            <version>4.1</version>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -60,6 +67,14 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+            </resource>
+            <!-- the design tokens, read by FlatLagoonModernLaf: the same file the Compose theme is generated from -->
+            <resource>
+                <directory>${project.basedir}/tokens</directory>
+                <targetPath>io/github/kormcrete/flatlaf/lagoon</targetPath>
+                <includes>
+                    <include>lagoon.tokens.json</include>
+                </includes>
             </resource>
             <!-- the jar carries the project's LICENSE and NOTICE -->
             <resource>
