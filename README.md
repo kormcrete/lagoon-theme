@@ -3,7 +3,8 @@
 [![build](https://github.com/kormcrete/lagoon-theme/actions/workflows/build.yml/badge.svg)](https://github.com/kormcrete/lagoon-theme/actions/workflows/build.yml)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
-A classic light theme for [FlatLaf](https://www.formdev.com/flatlaf/).
+A classic light theme for [FlatLaf](https://www.formdev.com/flatlaf/), and a modern one next to it (see
+[The modern Lagoon](#the-modern-lagoon)).
 
 <p>
   <img src="docs/order-desk-windows.png" alt="Order Desk with the Lagoon theme on Windows: the orders list, one order selected" width="49%">
@@ -145,6 +146,73 @@ The same file can set any other key, e.g. `@background`, `Table.rowHeight` or `T
 example: every switch on, with the denser sizes, palette, trees and message layout the theme had
 before its defaults followed FlatLaf Light.
 
+## The modern Lagoon
+
+`FlatLagoonModernLaf`, in the same jar, is Lagoon's modern look: a light ground (#F4F7FA), white cards with soft
+corners and soft shadows, one blue accent (#1868C7), teal for what is good and amber for what needs attention. Its
+colours, corner radii, control heights and text sizes come from `tokens/lagoon.tokens.json`, the design tokens the
+Compose theme under `compose/` is generated from too; the jar carries the file and the theme reads it when it is
+installed. The classic `FlatLagoonLaf` stays as it is.
+
+```java
+import io.github.kormcrete.flatlaf.lagoon.FlatLagoonModernLaf;
+
+FlatLagoonModernLaf.setup();   // before the first Swing component is created
+```
+
+The tokens name Inter as the font. Add FlatLaf's Inter to use it; without it the theme takes the platform's UI font:
+
+```xml
+<dependency>
+    <groupId>com.formdev</groupId>
+    <artifactId>flatlaf-fonts-inter</artifactId>
+    <version>4.1</version>
+</dependency>
+```
+
+Body text keeps the platform's UI font size, so FlatLaf scales the theme as it scales its own; headings and small
+text keep the tokens' steps from it. An application that chose its own family with `FlatLaf.setPreferredFontFamily`
+keeps it.
+
+The tokens become UI defaults (`Lagoon.color.primary`, `Lagoon.radius.card`, `Lagoon.metrics.controlHeight`, ...;
+the list is at the top of `FlatLagoonModernLaf.properties`). Buttons are the tokens' `buttonHeight` tall, fields,
+combo boxes and spinners their `controlHeight`, table rows their `rowHeight`. An application re-tints through the
+theme's own keys in its own `FlatLagoonModernLaf.properties`, as with any FlatLaf theme (`@accentColor`,
+`Button.default.background`, a `[style]` rule...).
+
+### Style classes
+
+Set with `putClientProperty(FlatClientProperties.STYLE_CLASS, "...")`; several at once separated by spaces, e.g.
+`"h2 muted"`.
+
+| Style class | On | Look |
+|---|---|---|
+| `primary` | `JButton` | The accent with white text, as the default button. |
+| `tonal` | `JButton` | The accent's tint with its strong ink. |
+| `danger` | `JButton` | White, red text and a red hairline; a red tint on hover. |
+| `card` | `JPanel` | White, the card's corners, a hairline and the tokens' gap inside. |
+| `h1`, `h2`, `h3` | any | Title, headline (bold) and heading (semibold) sizes of the tokens. |
+| `small`, `caption` | any | The tokens' small text, and their label size in semibold. |
+| `muted` | any | The muted ink, for secondary text. |
+| `pill-info`, `pill-success`, `pill-attention`, `pill-danger`, `pill-neutral` | `JLabel` | A status pill in a tone's tint and ink. |
+| `segmented` | `JPanel`, `JToggleButton` | A rounded track and its options (see `SegmentedControl`). |
+| `search` | `JTextField` | A magnifier in front, a clear button, a soft line. |
+
+### Components
+
+Small public classes in the same package, themed through UI defaults of the modern theme (`LagoonCard.*`,
+`Stepper.*`, ...; each class's Javadoc lists its keys):
+
+- `LagoonCard` — a white panel with rounded corners on a soft shadow, painted on whatever is under it.
+- `StatusPill` — "● Placed": a label with a dot in one of the `LagoonTone`s (info, success, attention, danger,
+  neutral).
+- `AvatarTile` — initials or an icon in a tinted rounded tile; the same key always gets the same of the tokens' tile
+  colours, as in the Compose theme.
+- `Stepper` — − 3 + in a pill, between a minimum and a maximum; plain or filled in the accent.
+- `SegmentedControl` — options in a rounded track, the selected one white.
+- `Scrim` — a translucent veil over a window, in its layered pane at the modal layer, with modal content in the
+  middle: `Scrim.show(frame.getRootPane(), card)` ... `scrim.close()`.
+
 ## Notes for applications
 
 - Cell renderers that keep Swing's static `DefaultTableCellRenderer.noFocusBorder` (one pixel) and
@@ -169,6 +237,13 @@ of everything, for a visual check:
 
 ```
 mvn -q test-compile exec:java -Dexec.classpathScope=test -Dexec.mainClass=io.github.kormcrete.flatlaf.lagoon.LagoonGallery
+```
+
+`LagoonModernGallery` does the same for the modern Lagoon: its components and style classes on the ground colour.
+Given a file name it paints the gallery into a PNG instead, off screen:
+
+```
+mvn -q test-compile exec:java -Dexec.classpathScope=test -Dexec.mainClass=io.github.kormcrete.flatlaf.lagoon.LagoonModernGallery -Dexec.args=gallery.png -Djava.awt.headless=true
 ```
 
 ## Licence
