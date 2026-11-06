@@ -179,7 +179,7 @@ public class FlatLagoonModernLaf extends FlatLightLaf {
     @Override
     public UIDefaults getDefaults() {
         UIDefaults defaults = super.getDefaults();
-        // Buttons, fields, combo boxes and spinners as tall as the tokens' buttonHeight and controlHeight.
+        // Buttons, fields, combo boxes and spinners as tall as the tokens' controlHeight; list rows as tall as rowHeight.
         defaults.put("ButtonUI", ModernControlUI.Button.class.getName());
         defaults.put("ToggleButtonUI", ModernControlUI.ToggleButton.class.getName());
         defaults.put("TextFieldUI", ModernControlUI.TextField.class.getName());
@@ -187,6 +187,7 @@ public class FlatLagoonModernLaf extends FlatLightLaf {
         defaults.put("FormattedTextFieldUI", ModernControlUI.FormattedTextField.class.getName());
         defaults.put("ComboBoxUI", ModernControlUI.ComboBox.class.getName());
         defaults.put("SpinnerUI", ModernControlUI.Spinner.class.getName());
+        defaults.put("ListUI", ModernControlUI.List.class.getName());
         return defaults;
     }
 

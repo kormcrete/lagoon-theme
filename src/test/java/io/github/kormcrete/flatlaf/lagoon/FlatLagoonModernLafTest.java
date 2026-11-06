@@ -354,14 +354,42 @@ class FlatLagoonModernLafTest {
     void controlsAreAsTallAsTheTokensSay() {
         FlatLagoonModernLaf.setup();
         int control = TOKENS.length("controlHeight");
-        assertTokenHeight(TOKENS.length("buttonHeight"), () -> new JButton("Save"));
-        assertTokenHeight(TOKENS.length("buttonHeight"), () -> new JToggleButton("Filter"));
+        // One height for every control: buttons too.
+        assertTokenHeight(control, () -> new JButton("Save"));
+        assertTokenHeight(control, () -> new JToggleButton("Filter"));
         assertTokenHeight(control, () -> new JTextField(10));
         assertTokenHeight(control, () -> new JPasswordField(10));
         assertTokenHeight(control, () -> new JFormattedTextField("1"));
         assertTokenHeight(control, () -> new JComboBox<>(new String[] {"Standard"}));
         assertTokenHeight(control, () -> new JSpinner());
         assertEquals(Arrays.asList(), problems);
+    }
+
+    /** A button showing only an icon is a square as tall as the other controls. */
+    @Test
+    void anIconOnlyButtonIsASquareAsTallAsTheOtherControls() {
+        FlatLagoonModernLaf.setup();
+        JButton button = new JButton(new javax.swing.ImageIcon(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB)));
+        Dimension size = button.getPreferredSize();
+        assertEquals(new JTextField(10).getPreferredSize().height, size.height);
+        assertEquals(size.height, size.width);
+    }
+
+    /** Rows are one height whatever shows them: tables, trees and lists. */
+    @Test
+    void treeAndListRowsAreAsTallAsTableRows() {
+        FlatLagoonModernLaf.setup();
+        int row = scale(TOKENS.length("rowHeight"));
+        assertEquals(row, new javax.swing.JTable(3, 2).getRowHeight());
+        javax.swing.JTree tree = new javax.swing.JTree();
+        assertEquals(row, tree.getRowBounds(0).height);
+        javax.swing.JList<String> list = new javax.swing.JList<>(new String[] {"Office", "Coffee"});
+        list.setSize(200, 400);
+        assertEquals(row, list.getCellBounds(0, 0).height);
+        // A renderer taller than the row keeps its height in a list.
+        javax.swing.JList<String> tall = new javax.swing.JList<>(new String[] {"<html>One<br>Two<br>Three<br>Four</html>"});
+        tall.setSize(200, 400);
+        assertTrue(tall.getCellBounds(0, 0).height > row);
     }
 
     @Test
@@ -373,7 +401,7 @@ class FlatLagoonModernLafTest {
         JToolBar bar = new JToolBar();
         JButton tool = new JButton("Save");
         bar.add(tool);
-        assertTrue(tool.getPreferredSize().height < scale(TOKENS.length("buttonHeight")));
+        assertTrue(tool.getPreferredSize().height < scale(TOKENS.length("controlHeight")));
     }
 
     // ---------------------------------------------------------------- components

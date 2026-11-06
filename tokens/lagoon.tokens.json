@@ -67,7 +67,7 @@
     },
     "desktop": {
       "controlHeight": "36dp",
-      "buttonHeight": "38dp",
+      "buttonHeight": "36dp",
       "rowHeight": "46dp",
       "touchTarget": "30dp",
       "gutter": "24dp",
