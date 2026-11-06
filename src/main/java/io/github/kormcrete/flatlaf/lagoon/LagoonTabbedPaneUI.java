@@ -1,6 +1,7 @@
 package io.github.kormcrete.flatlaf.lagoon;
 
 import com.formdev.flatlaf.ui.FlatTabbedPaneUI;
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 import javax.swing.Icon;
@@ -9,11 +10,13 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ComponentUI;
 import java.awt.Color;
 import java.awt.FontMetrics;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Paint;
 import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.Path2D;
 
 /**
  * Card tabs where the unselected tabs are framed and shaded too, so the selected one reads as
@@ -28,6 +31,9 @@ import java.awt.Rectangle;
  * <p>{@code TabbedPane.selectedTabRaise} (pixels; 0 for none) lowers the unselected tabs from the outer edge
  * by that much, so the selected tab stands above its neighbours; their title, icon or tab component stays
  * centred in what is left.
+ *
+ * <p>{@code Lagoon.shade} ({@link LagoonShade}) shades the unselected tabs; {@code TabbedPane.cardTabArc}
+ * rounds the corners on their outer edge, as FlatLaf rounds the selected tab's.
  */
 public class LagoonTabbedPaneUI extends FlatTabbedPaneUI {
 
@@ -35,6 +41,8 @@ public class LagoonTabbedPaneUI extends FlatTabbedPaneUI {
     private Color unselectedBottomColor;
     private Insets contentMargins;
     private int selectedTabRaise;
+    /** {@code Lagoon.shade}, read when installed. */
+    private String shade = LagoonShade.FLAT;
 
     public static ComponentUI createUI(JComponent c) {
         return new LagoonTabbedPaneUI();
@@ -47,6 +55,7 @@ public class LagoonTabbedPaneUI extends FlatTabbedPaneUI {
         unselectedBottomColor = UIManager.getColor("TabbedPane.unselectedBottomColor");
         contentMargins = UIManager.getInsets("TabbedPane.contentMargins");
         selectedTabRaise = UIManager.getInt("TabbedPane.selectedTabRaise");
+        shade = LagoonShade.current();
     }
 
     // FlatLaf paints the frame from the separator height, not from these insets, so the room added here stays blank.
@@ -65,57 +74,74 @@ public class LagoonTabbedPaneUI extends FlatTabbedPaneUI {
     @Override
     protected void paintTabBackground(Graphics g, int tabPlacement, int tabIndex,
                                       int x, int y, int w, int h, boolean isSelected) {
-        if (!isSelected) {
-            Rectangle r = lowered(tabPlacement, x, y, w, h);
-            x = r.x; y = r.y; w = r.width; h = r.height;
-        }
-        if (isSelected || unselectedBottomColor == null || isHover(tabIndex)) {
+        if (isSelected || unselectedBottomColor == null) {
             super.paintTabBackground(g, tabPlacement, tabIndex, x, y, w, h, isSelected);
             return;
         }
-        // Light on the outer edge, darker towards the content, whichever side the content is on.
-        Color light = tabPane.getBackground();
-        GradientPaint shade;
-        switch (tabPlacement) {
-            case BOTTOM: shade = new GradientPaint(x, y + h, light, x, y, unselectedBottomColor); break;
-            case LEFT:   shade = new GradientPaint(x, y, light, x + w, y, unselectedBottomColor); break;
-            case RIGHT:  shade = new GradientPaint(x + w, y, light, x, y, unselectedBottomColor); break;
-            default:     shade = new GradientPaint(x, y, light, x, y + h, unselectedBottomColor); break;
-        }
+        Rectangle r = lowered(tabPlacement, x, y, w, h);
+        Paint fill = isHover(tabIndex) && hoverColor != null ? hoverColor
+                : LagoonShade.tab(shade, tabPane.getBackground(), unselectedBottomColor, r, tabPlacement);
         Graphics2D g2 = (Graphics2D) g.create();
         try {
-            g2.setPaint(shade);
-            g2.fillRect(x, y, w, h);
+            FlatUIUtils.setRenderingHints(g2);
+            g2.setPaint(fill);
+            g2.fill(outerRounded(tabPlacement, r.x, r.y, r.width, r.height, radius(r)));
         } finally {
             g2.dispose();
         }
     }
 
+    // The outer edge with its rounded corners, the trailing edge, and the leading edge on the first tab only, so
+    // neighbours share one line (a later tab's frame starts on the line before it). The edge facing the content
+    // belongs to the content frame: the frame is drawn one line past it and clipped there.
     @Override
     protected void paintTabBorder(Graphics g, int tabPlacement, int tabIndex,
                                   int x, int y, int w, int h, boolean isSelected) {
-        if (!isSelected) {
-            Rectangle r = lowered(tabPlacement, x, y, w, h);
-            x = r.x; y = r.y; w = r.width; h = r.height;
-        }
         if (isSelected || unselectedBorderColor == null) {
             super.paintTabBorder(g, tabPlacement, tabIndex, x, y, w, h, isSelected);
             return;
         }
-        // Outer and trailing edges, plus the leading edge on the first tab only, so neighbours share
-        // one line. The edge facing the content belongs to the content frame.
+        Rectangle r = lowered(tabPlacement, x, y, w, h);
         int line = UIScale.scale(1);
         boolean vertical = tabPlacement == LEFT || tabPlacement == RIGHT;
-        boolean first = tabIndex == 0;
-        g.setColor(unselectedBorderColor);
-        if (vertical) {
-            g.fillRect(tabPlacement == LEFT ? x : x + w - line, y, line, h);   // outer
-            g.fillRect(x, y + h - line, w, line);                              // trailing (below)
-            if (first) g.fillRect(x, y, w, line);                              // leading (above)
-        } else {
-            g.fillRect(x, tabPlacement == TOP ? y : y + h - line, w, line);    // outer
-            g.fillRect(x + w - line, y, line, h);                              // trailing (right)
-            if (first) g.fillRect(x, y, line, h);                              // leading (left)
+        if (tabIndex > 0) {
+            if (vertical) { r.y -= line; r.height += line; } else { r.x -= line; r.width += line; }
+        }
+        Rectangle frame = new Rectangle(r);
+        switch (tabPlacement) {
+            case BOTTOM: frame.y -= line; frame.height += line; break;
+            case LEFT:   frame.width += line; break;
+            case RIGHT:  frame.x -= line; frame.width += line; break;
+            default:     frame.height += line; break;
+        }
+        float radius = radius(r);
+        Path2D ring = new Path2D.Float(Path2D.WIND_EVEN_ODD);
+        ring.append(outerRounded(tabPlacement, frame.x, frame.y, frame.width, frame.height, radius), false);
+        ring.append(outerRounded(tabPlacement, frame.x + line, frame.y + line, frame.width - 2 * line,
+                frame.height - 2 * line, Math.max(0, radius - line)), false);
+        Graphics2D g2 = (Graphics2D) g.create();
+        try {
+            FlatUIUtils.setRenderingHints(g2);
+            g2.clip(r);
+            g2.setColor(unselectedBorderColor);
+            g2.fill(ring);
+        } finally {
+            g2.dispose();
+        }
+    }
+
+    /** The corner radius of an unselected tab: half of {@code TabbedPane.cardTabArc}, as the selected tab's. */
+    private float radius(Rectangle tab) {
+        return Math.min(UIScale.scale(cardTabArc) / 2f, Math.min(tab.width, tab.height) / 2f);
+    }
+
+    /** A rectangle with its two corners on the tab's outer edge rounded. */
+    private static Shape outerRounded(int tabPlacement, float x, float y, float w, float h, float radius) {
+        switch (tabPlacement) {
+            case BOTTOM: return FlatUIUtils.createRoundRectanglePath(x, y, w, h, 0, 0, radius, radius);
+            case LEFT:   return FlatUIUtils.createRoundRectanglePath(x, y, w, h, radius, 0, radius, 0);
+            case RIGHT:  return FlatUIUtils.createRoundRectanglePath(x, y, w, h, 0, radius, 0, radius);
+            default:     return FlatUIUtils.createRoundRectanglePath(x, y, w, h, radius, radius, 0, 0);
         }
     }
 

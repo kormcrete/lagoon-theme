@@ -814,10 +814,22 @@ class FlatLagoonLafTest {
         assertEquals(0, runsOf(shadow, thumbCentreColumn(new JScrollBar(JScrollBar.VERTICAL, 0, 1, 0, 100))));
     }
 
-    /** The thumb is light at rest; the mouse anywhere on the bar deepens its fill, frame and ridges together. */
+    /**
+     * The thumb is light at rest; the mouse anywhere on the bar deepens its fill, frame and ridges together. Measured
+     * flat, where the fill is the colour itself (the shaded fills: {@link LagoonShadeTest}).
+     */
     @Test
     void aThumbDeepensWithItsFrameAndRidgesWhileTheMouseIsOnTheBar() {
         FlatLagoonLaf.setup();
+        UIManager.put("Lagoon.shade", "flat");
+        try {
+            aFlatThumbDeepensWhileTheMouseIsOnTheBar();
+        } finally {
+            UIManager.put("Lagoon.shade", null);
+        }
+    }
+
+    private static void aFlatThumbDeepensWhileTheMouseIsOnTheBar() {
         JScrollBar bar = new JScrollBar(JScrollBar.VERTICAL, 0, 40, 0, 100);
         int[] resting = thumbCentreColumn(bar);
         assertTrue(runsOf(UIManager.getColor("ScrollBar.thumbBorderColor").getRGB(), resting) > 0, "resting frame");

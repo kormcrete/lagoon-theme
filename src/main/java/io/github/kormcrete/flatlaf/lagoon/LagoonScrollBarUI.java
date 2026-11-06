@@ -19,6 +19,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Paint;
 import java.awt.Rectangle;
 
 /**
@@ -32,12 +33,19 @@ import java.awt.Rectangle;
  * {@code ScrollBar.hoverThumbBorderColor} / {@code ScrollBar.pressedThumbBorderColor} and
  * {@code ScrollBar.hoverGripShadowColor} / {@code ScrollBar.pressedGripShadowColor}, each falling back
  * to the resting colour.
+ *
+ * <p>{@code Lagoon.shade} ({@link LagoonShade}) shades the thumb across its breadth and grooves the track;
+ * {@code ScrollBar.thumbArc} rounds the thumb's ends, its frame included.
  */
 public class LagoonScrollBarUI extends FlatScrollBarUI {
 
     /** The state FlatLaf last asked the thumb's colour for, so the frame and grip match the fill. */
     private boolean thumbHover;
     private boolean thumbPressed;
+    /** {@code Lagoon.shade}, read when installed. */
+    private String shade = LagoonShade.FLAT;
+    /** Whether FlatLaf's fill, {@link #paintTrackOrThumb}, is filling the thumb (else the track). */
+    private boolean fillingThumb;
 
     public static ComponentUI createUI(JComponent c) {
         return new LagoonScrollBarUI();
@@ -46,6 +54,7 @@ public class LagoonScrollBarUI extends FlatScrollBarUI {
     @Override
     protected void installDefaults() {
         super.installDefaults();
+        shade = LagoonShade.current();
         Border border = scrollbar.getBorder();
         if (border == null || border instanceof UIResource) {
             scrollbar.setBorder(new Line());
@@ -87,9 +96,31 @@ public class LagoonScrollBarUI extends FlatScrollBarUI {
     }
 
     @Override
+    protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+        fillingThumb = false;
+        super.paintTrack(g, c, trackBounds);
+    }
+
+    /** FlatLaf's fill of the track or thumb, with the shade's gradient in place of the plain colour it set. */
+    @Override
+    protected void paintTrackOrThumb(Graphics g, JComponent c, Rectangle bounds, Insets insets, int arc) {
+        boolean vertical = scrollbar.getOrientation() == JScrollBar.VERTICAL;
+        Paint paint = fillingThumb
+                ? LagoonShade.thumb(shade, g.getColor(), bounds, vertical)
+                : LagoonShade.groove(shade, g.getColor(), bounds, vertical,
+                        vertical && !scrollbar.getComponentOrientation().isLeftToRight());
+        if (paint != null) {
+            ((Graphics2D) g).setPaint(paint);
+        }
+        super.paintTrackOrThumb(g, c, bounds, insets, arc);
+    }
+
+    @Override
     protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
         thumbHover = thumbPressed = false;
+        fillingThumb = true;
         super.paintThumb(g, c, thumbBounds);
+        fillingThumb = false;
         Color frame = stateColor("ScrollBar.pressedThumbBorderColor", "ScrollBar.hoverThumbBorderColor",
                 "ScrollBar.thumbBorderColor");
         if (frame == null || thumbBounds.isEmpty() || !scrollbar.isEnabled()) {
@@ -101,8 +132,9 @@ public class LagoonScrollBarUI extends FlatScrollBarUI {
             insets = new Insets(insets.right, insets.top, insets.left, insets.bottom);
         }
         Rectangle r = FlatUIUtils.subtractInsets(thumbBounds, UIScale.scale(insets));
+        float arc = Math.min(UIScale.scale((float) thumbArc), Math.min(r.width, r.height));
         g.setColor(frame);
-        FlatUIUtils.paintOutline((Graphics2D) g, r.x, r.y, r.width, r.height, UIScale.scale(1f), 0);
+        FlatUIUtils.paintOutline((Graphics2D) g, r.x, r.y, r.width, r.height, UIScale.scale(1f), arc);
         paintGrip(g, r);
     }
 

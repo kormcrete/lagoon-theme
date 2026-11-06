@@ -21,7 +21,7 @@ heights and table lines; <code>LagoonGallery</code> (see <a href="#build">Build<
 comes.</sub>
 
 A neutral grey palette, softened corners, one-pixel dark frames set in a light ring, bevelled buttons, framed card
-tabs, white tables with a grid and blue scroll bars with buttons: the clearly delimited look of a traditional desktop
+tabs, white tables with a grid and glossy blue scroll bars with buttons: the clearly delimited look of a traditional desktop
 application, for forms and data-heavy screens, on FlatLaf Light's layout and sizes — with everything FlatLaf brings
 underneath: HiDPI scaling, native window decorations, SVG icons and an actively maintained look-and-feel. An
 application that wants it denser turns on a few switches (see *A denser, classic look*).
@@ -46,6 +46,22 @@ import io.github.kormcrete.flatlaf.lagoon.FlatLagoonLaf;
 
 FlatLagoonLaf.setup();   // before the first Swing component is created
 ```
+
+### Gloss and Soft
+
+`FlatLagoonLaf` comes with the Gloss shade: scroll thumbs shaded like a tube (light on one side, darker along the
+middle, glowing towards the other side) with round ends, in a grooved track, and rounded tabs with a pillow shade.
+`FlatLagoonSoftLaf` is the quieter variant: thumbs and tabs shaded plainly from light to dark, with smaller round
+ends; everything else is the same.
+
+```java
+FlatLagoonSoftLaf.setup();
+```
+
+The shade is the key `Lagoon.shade` (`gloss`, `soft` or `flat`, one colour each as in earlier versions), and the
+round ends are `ScrollBar.thumbArc` and `TabbedPane.cardTabArc`; an application can set them in its own properties
+(see *A denser, classic look*). Every shade is worked out from the part's colour in its state, so hover and pressed
+keep it, and it is painted with plain gradients: no images.
 
 ### Fonts
 
@@ -72,6 +88,7 @@ FlatLaf.updateUI();
 - `FlatLagoonLaf` — a `FlatLightLaf` subclass; FlatLaf loads `FlatLagoonLaf.properties` from the
   same package. The properties file is the one place that names colours and sizes, and is
   commented section by section.
+- `FlatLagoonSoftLaf` — Lagoon with the Soft shade; `FlatLagoonSoftLaf.properties` holds its differences.
 - `LagoonTabbedPaneUI` — FlatLaf's card tabs frame only the selected tab; this theme frames and
   shades the unselected ones too. Its two colours are properties keys
   (`TabbedPane.unselectedBorderColor`, `TabbedPane.unselectedBottomColor`), and it handles all
@@ -104,7 +121,7 @@ FlatLaf.updateUI();
   sizes by default; the switches below give the classic variants.
 
 Still to follow as further UI delegates: the raised face on table headers, and a gradient on the
-menubar, toolbar and scroll thumb.
+menubar and toolbar.
 
 ## A denser, classic look
 
