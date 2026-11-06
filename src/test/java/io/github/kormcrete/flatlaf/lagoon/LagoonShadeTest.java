@@ -170,16 +170,16 @@ class LagoonShadeTest {
         assertTrue(column[1] > column[n / 2] && column[n / 2] > column[n - 2], str(column));
     }
 
-    // ------------------------------------------------------------------------------------------------ helpers
+    // ---------------------------------------------------------------- helpers (also used by FlatLagoonDarkLafTest)
 
-    private static JScrollBar bar() {
+    static JScrollBar bar() {
         JScrollBar bar = new JScrollBar(JScrollBar.VERTICAL, 0, 40, 0, 100);
         bar.setSize(16, 100);
         bar.doLayout();
         return bar;
     }
 
-    private static JTabbedPane tabs() {
+    static JTabbedPane tabs() {
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Orders", new JPanel());
         tabs.addTab("Customers", new JPanel());
@@ -188,7 +188,7 @@ class LagoonShadeTest {
         return tabs;
     }
 
-    private static BufferedImage paint(java.awt.Component c) {
+    static BufferedImage paint(java.awt.Component c) {
         BufferedImage image = new BufferedImage(c.getWidth(), c.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
         c.paint(g);
@@ -197,7 +197,7 @@ class LagoonShadeTest {
     }
 
     /** The first row of the thumb's frame down the bar's centre column. */
-    private static int thumbTop(BufferedImage image, int frame) {
+    static int thumbTop(BufferedImage image, int frame) {
         for (int y = 0; y < image.getHeight(); y++) {
             if (image.getRGB(8, y) == frame) {
                 return y;
@@ -207,7 +207,7 @@ class LagoonShadeTest {
     }
 
     /** Luminance across the thumb, x 0..15, a few rows below its top (clear of the round end and the grip). */
-    private static float[] thumbRow(JScrollBar bar, boolean hover) {
+    static float[] thumbRow(JScrollBar bar, boolean hover) {
         if (hover) {
             // On the track below the thumb, not on the thumb itself.
             bar.dispatchEvent(new MouseEvent(bar, MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, 8, 80, 0, false));
@@ -223,7 +223,7 @@ class LagoonShadeTest {
     }
 
     /** Luminance down an unselected tab, just inside its leading edge, from below its frame to the content's line. */
-    private static float[] tabColumn() {
+    static float[] tabColumn() {
         JTabbedPane tabs = tabs();
         BufferedImage image = paint(tabs);
         Rectangle tab = tabs.getBoundsAt(1);
@@ -236,12 +236,12 @@ class LagoonShadeTest {
         return column;
     }
 
-    private static float luminance(int rgb) {
+    static float luminance(int rgb) {
         Color c = new Color(rgb, true);
         return .299f * c.getRed() + .587f * c.getGreen() + .114f * c.getBlue();
     }
 
-    private static float average(float[] values) {
+    static float average(float[] values) {
         float sum = 0;
         for (int i = 2; i < values.length - 2; i++) {
             sum += values[i];
@@ -249,7 +249,7 @@ class LagoonShadeTest {
         return sum / (values.length - 4);
     }
 
-    private static String str(float[] values) {
+    static String str(float[] values) {
         StringBuilder s = new StringBuilder();
         for (float v : values) {
             s.append(Math.round(v)).append(' ');

@@ -64,6 +64,21 @@ round ends are `ScrollBar.thumbArc` and `TabbedPane.cardTabArc`; an application 
 (see *A denser, classic look*). Every shade is worked out from the part's colour in its state, so hover and pressed
 keep it, and it is painted with plain gradients: no images.
 
+### Dark
+
+`FlatLagoonDarkLaf` is Lagoon at night: the same shapes, shading and sizes in a calm blue-grey palette, with soft
+text that does not glare and the accent kept for what marks state. `FlatLagoonSoftDarkLaf` is its Soft variant.
+Both are dark FlatLaf themes (`FlatLaf.isLafDark()`), built on FlatLaf Dark's defaults.
+
+```java
+FlatLagoonDarkLaf.setup();
+```
+
+Every colour of the dark palette comes from the variables at the top of `FlatLagoonDarkLaf.properties`, so an
+application can retint it by setting those variables in its own `FlatLagoonDarkLaf.properties`. An application's
+`FlatLagoonLaf.properties` applies to the dark themes too: write the colours there with FlatLaf's `[light]` prefix
+(`[light]@background = #F5F6F7`) so they stay out of the dark ones; switches such as `Lagoon.dialogFont` apply to both.
+
 ### Fonts
 
 Like FlatLaf Light, the theme uses the platform's UI font, with menus and the toolbar in the regular
@@ -90,6 +105,9 @@ FlatLaf.updateUI();
   same package. The properties file is the one place that names colours and sizes, and is
   commented section by section.
 - `FlatLagoonSoftLaf` — Lagoon with the Soft shade; `FlatLagoonSoftLaf.properties` holds its differences.
+- `FlatLagoonDarkLaf`, `FlatLagoonSoftDarkLaf` — the dark Lagoon and its Soft variant; FlatLaf loads FlatLaf Dark's
+  defaults, then `FlatLagoonLaf.properties`, then `FlatLagoonDarkLaf.properties`, which sets every colour again from its
+  palette.
 - `LagoonTabbedPaneUI` — FlatLaf's card tabs frame only the selected tab; this theme frames and
   shades the unselected ones too. Its two colours are properties keys
   (`TabbedPane.unselectedBorderColor`, `TabbedPane.unselectedBottomColor`), and it handles all
@@ -238,6 +256,8 @@ of everything, for a visual check:
 ```
 mvn -q test-compile exec:java -Dexec.classpathScope=test -Dexec.mainClass=io.github.kormcrete.flatlaf.lagoon.LagoonGallery
 ```
+
+Add `-Dexec.args=dark` (or `soft`, `soft-dark`) for another of the classic themes.
 
 `LagoonModernGallery` does the same for the modern Lagoon: its components and style classes on the ground colour.
 Given a file name it paints the gallery into a PNG instead, off screen:

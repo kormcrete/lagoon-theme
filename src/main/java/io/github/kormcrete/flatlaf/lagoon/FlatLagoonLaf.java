@@ -8,12 +8,13 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.plaf.UIResource;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Properties;
 
 /**
@@ -62,7 +63,10 @@ public class FlatLagoonLaf extends FlatLightLaf {
         return font != null && font != UIManager.getLookAndFeelDefaults().get("defaultFont");
     }
 
-    /** {@code FlatLagoonLaf-addons.properties}: keys of add-on components, applied after the add-ons' own. */
+    /**
+     * {@code FlatLagoonLaf-addons.properties}, then the same file of each Lagoon subclass down to this one
+     * ({@code FlatLagoonDarkLaf-addons.properties}...): keys of add-on components, applied after the add-ons' own.
+     */
     @Override
     protected Properties getAdditionalDefaults() {
         Properties properties = new Properties();
@@ -70,12 +74,18 @@ public class FlatLagoonLaf extends FlatLightLaf {
         if (inherited != null) {
             properties.putAll(inherited);
         }
-        try (InputStream in = FlatLagoonLaf.class.getResourceAsStream("FlatLagoonLaf-addons.properties")) {
-            if (in != null) {
-                properties.load(in);
+        Deque<Class<?>> lagoonClasses = new ArrayDeque<>();
+        for (Class<?> c = getClass(); FlatLagoonLaf.class.isAssignableFrom(c); c = c.getSuperclass()) {
+            lagoonClasses.push(c);
+        }
+        for (Class<?> c : lagoonClasses) {
+            try (InputStream in = c.getResourceAsStream(c.getSimpleName() + "-addons.properties")) {
+                if (in != null) {
+                    properties.load(in);
+                }
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
             }
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
         }
         return properties;
     }
@@ -122,7 +132,7 @@ public class FlatLagoonLaf extends FlatLightLaf {
         defaults.put("Table.scrollPaneCornerComponent", (UIDefaults.ActiveValue) table -> new TableCorner());
         // Two-tone etched group border; a properties file cannot name a Border class.
         defaults.put("TitledBorder.border", new BorderUIResource.EtchedBorderUIResource(
-                new Color(0xF7F8F8), new Color(0xBCBDBE)));
+                defaults.getColor("TitledBorder.highlightColor"), defaults.getColor("TitledBorder.shadowColor")));
         return defaults;
     }
 

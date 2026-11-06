@@ -4,11 +4,20 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-/** One of everything, in a window, for looking at the theme. Run it as a program. */
+/**
+ * One of everything, in a window, for looking at the theme. Run it as a program; the argument picks the theme:
+ * {@code soft}, {@code dark}, {@code soft-dark}, or none for {@link FlatLagoonLaf}.
+ */
 public class LagoonGallery {
 
     public static void main(String[] args) {
-        FlatLagoonLaf.setup();
+        String theme = args.length > 0 ? args[0] : "";
+        switch (theme) {
+            case "soft": FlatLagoonSoftLaf.setup(); break;
+            case "dark": FlatLagoonDarkLaf.setup(); break;
+            case "soft-dark": FlatLagoonSoftDarkLaf.setup(); break;
+            default: FlatLagoonLaf.setup(); break;
+        }
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Lagoon gallery");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
