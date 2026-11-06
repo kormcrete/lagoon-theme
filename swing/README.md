@@ -77,6 +77,17 @@ Both are dark FlatLaf themes (`FlatLaf.isLafDark()`), built on FlatLaf Dark's de
 FlatLagoonDarkLaf.setup();
 ```
 
+<p>
+  <img src="../docs/order-desk-windows-dark.png" alt="Order Desk with Lagoon Dark on Windows: the orders list, one order selected" width="49%">
+  <img src="../docs/order-desk-windows-dark-new-order.png" alt="A new order with Lagoon Dark on Windows: categories, the product catalogue and a cart of four products" width="49%">
+  <img src="../docs/order-desk-macos-dark.png" alt="The orders list with Lagoon Dark on macOS" width="49%">
+  <img src="../docs/order-desk-macos-dark-new-order.png" alt="The new order with Lagoon Dark on macOS" width="49%">
+  <img src="../docs/order-desk-linux-dark.png" alt="The orders list with Lagoon Dark on Linux" width="49%">
+  <img src="../docs/order-desk-linux-dark-new-order.png" alt="The new order with Lagoon Dark on Linux" width="49%">
+</p>
+
+<sub>Windows, macOS and Linux (top to bottom): Order Desk under Lagoon Dark (View ▸ Theme ▸ Lagoon Dark).</sub>
+
 Every colour of the dark palette comes from the variables at the top of `FlatLagoonDarkLaf.properties`, so an
 application can retint it by setting those variables in its own `FlatLagoonDarkLaf.properties`. An application's
 `FlatLagoonLaf.properties` applies to the dark themes too: write the colours there with FlatLaf's `[light]` prefix

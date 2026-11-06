@@ -11,10 +11,12 @@ file of design tokens.
 <p>
   <img src="docs/order-desk-windows.png" alt="Order Desk with the classic Lagoon theme on Windows: the orders list, one order selected" width="49%">
   <img src="docs/order-desk-windows-new-order.png" alt="A new order on Windows: categories, the product catalogue and a cart of four products in different quantities" width="49%">
+  <img src="docs/order-desk-windows-dark.png" alt="The orders list with Lagoon Dark on Windows" width="49%">
+  <img src="docs/order-desk-windows-dark-new-order.png" alt="The new order with Lagoon Dark on Windows" width="49%">
 </p>
 
-<sub>The classic Lagoon for Swing in <a href="https://github.com/kormcrete/swing-order-desk-demo">Order Desk</a>, a
-demo application, on Windows. More in <a href="swing/README.md">swing/</a>.</sub>
+<sub>The classic Lagoon for Swing, light and dark, in <a href="https://github.com/kormcrete/swing-order-desk-demo">Order
+Desk</a>, a demo application, on Windows. More in <a href="swing/README.md">swing/</a>.</sub>
 
 ## What is where
 
